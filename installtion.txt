@@ -1,0 +1,28 @@
+on master:
+sudo su
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum install epel-release-latest-7.noarch.rpm
+yum update -y
+yum install python python-devel python-pip openssl ansible -y
+amazon-linux-extras install ansible2
+ansible --version
+useradd ansadmin 
+passwd ansadmin
+visudo
+vi /etc/ssh/sshd_config
+systemctl restart sshd
+
+on client:
+useradd ansadmin 
+passwd ansadmin
+visudo
+vi /etc/ssh/sshd_config
+systemctl restart sshd
+
+on master:
+sudo su ansadmin
+cd 
+ssh-keygen
+ssh-copy-id -i /home/ansadmin/.ssh/id_rsa.pub ansadmin@here-client-private-id
+sudo  vi /etc/ansible/hosts
+ansible -m ping dev
